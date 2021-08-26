@@ -14,8 +14,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--input_folder", required=True, help="Single 3d model or input folder containing 3d models")
 parser.add_argument("--nn_model", required=True, help="Trained Neural Network Model")
 parser.add_argument("--nn_model_type", required=True, choices=['fxia', 'dhiraj'], help="Model Type")
-parser.add_argument("--out_norm_input", action="store_true", help="Output normalized version of input file")
 parser.add_argument("--num_points", required=True, type=int, help="Number of points")
+parser.add_argument("--out_norm_input", action="store_true", help="Output normalized version of input file")
 parser.add_argument('--process_data', action='store_true', default=False, help='save data offline')
 parser.add_argument('--use_uniform_sample', action='store_true', default=False, help='use uniform sampiling')
 parser.add_argument('--num_category', default=40, type=int, choices=[10, 40],  help='training on ModelNet10/40')
@@ -72,8 +72,7 @@ def infer_model_index(input_folder, ip_options, autoencoder):
         ax.set_title("True Points")
         plt.show()'''
 
-        reconstructed_points = reconstructed_points + np.array([2, 0, 0])
-        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[255, 255, 0, 255])
+        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[255, 0, 0, 255])
         label_mesh = trimesh.PointCloud(point_label, colors=[255, 255, 0, 255])
         axis = trimesh.creation.axis(origin_color= [1., 0, 0])
 
