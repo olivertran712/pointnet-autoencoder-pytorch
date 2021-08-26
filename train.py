@@ -5,7 +5,7 @@ import random
 from torch.utils.data import DataLoader
 from torch import optim
 
-from dataprep.dataset import PointCloudDataset
+from dataprep.ModelNetDataLoader_AE import ModelNetDataLoader_AE
 from model.model import PCAutoEncoder
 from model.model_fxia22 import PointNetAE
 from torch.utils.tensorboard import SummaryWriter
@@ -17,14 +17,18 @@ else:
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--batch_size", type=int, default=32, help="input batch size")
+parser.add_argument("--model_type", required=True, choices=['dhiraj', 'fxia'], help="Model Types")
 parser.add_argument("--num_points", type=int, required=True, help="Number of Points to sample")
-parser.add_argument("--num_workers", type=int, default=4, help="Number Multiprocessing Workers")
 parser.add_argument("--dataset_path", required=True, help="Path to Dataset")
 parser.add_argument("--nepoch", type=int, required=True, help="Number of Epochs to train for")
+parser.add_argument("--batch_size", type=int, default=32, help="input batch size")
+parser.add_argument("--num_workers", type=int, default=4, help="Number Multiprocessing Workers")
 parser.add_argument("--load_saved_model", default='', help="load an saved model")
 parser.add_argument("--start_epoch_from", default=0, help="usually used with load model")
-parser.add_argument("--model_type", required=True, choices=['dhiraj', 'fxia'], help="Model Types")
+parser.add_argument('--process_data', action='store_true', default=False, help='save data offline')
+parser.add_argument('--use_uniform_sample', action='store_true', default=False, help='use uniform sampiling')
+parser.add_argument('--num_category', default=40, type=int, choices=[10, 40],  help='training on ModelNet10/40')
+parser.add_argument('--use_normals', action='store_true', default=False, help='use normals')
 
 ip_options = parser.parse_args()
 print(f"Input Arguments : {ip_options}")
@@ -42,8 +46,8 @@ writer = SummaryWriter('runs/' + ip_options.model_type)
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 # Creating Dataset
-train_ds = PointCloudDataset(ip_options.dataset_path, ip_options.num_points, 'train')
-test_ds = PointCloudDataset(ip_options.dataset_path, ip_options.num_points, 'test')
+train_ds = ModelNetDataLoader_AE(ip_options.dataset_path, ip_options, split='train', process_data=False)
+test_ds = ModelNetDataLoader_AE(ip_options.dataset_path, ip_options, split='test', process_data=False)
 
 # Creating DataLoader 
 train_dl = DataLoader(train_ds, batch_size=ip_options.batch_size, shuffle=True, num_workers= ip_options.num_workers)
@@ -132,7 +136,7 @@ for epoch in range(int(ip_options.start_epoch_from), ip_options.nepoch):
     # save model with the best loss
     if epoch_loss < best_loss:  
         best_loss = epoch_loss
-        torch.save(autoencoder.state_dict(), 'saved_models/autoencoder_%d.pth' % (epoch))
+        torch.save(autoencoder.state_dict(), 'saved_models/autoencoder_%s_%d.pth' % (ip_options.model_type, epoch))
         writer.add_embedding(latent_vector_all, metadata=filename_all, global_step=epoch, tag="Latent_Vectors")
 
     # Tensorboard logging 
