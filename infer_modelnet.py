@@ -50,6 +50,12 @@ def infer_model_index(input_folder, ip_options, autoencoder):
         # extract only "N" number of point from the Point Cloud
         choice = np.random.choice(len(point_test), num_points, replace=True)
         point_test = point_test[choice, :]
+        '''for i in range (len(point_test)):
+            if point_test[i,0]<0:
+                point_test[i,0] = 0
+                point_test[i,1] = 0
+                point_test[i,2] = 0'''
+        point_test_saved = point_test
         point_label = point_label[choice, :]
         point_test = torch.from_numpy(point_test).float()
         point_test = torch.unsqueeze(point_test, 0) #done to introduce batch_size of 1 
@@ -71,12 +77,18 @@ def infer_model_index(input_folder, ip_options, autoencoder):
         ax.scatter(point_label[:, 0], point_label[:, 1], point_label[:, 2])
         ax.set_title("True Points")
         plt.show()'''
-
-        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[255, 0, 0, 255])
-        label_mesh = trimesh.PointCloud(point_label, colors=[255, 255, 0, 255])
+        
+        max_x = np.max(point_label[:,0], axis=0)
+        print('max x: ', max_x)
+        point_mesh = trimesh.PointCloud(point_test_saved, colors=[255, 0, 0, 255])
+        reconstructed_points = reconstructed_points + np.array([2.5*max_x, 0, 0])
+        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[0, 255, 0, 255])
+        point_label = point_label + np.array([5*max_x, 0, 0])
+        label_mesh = trimesh.PointCloud(point_label, colors=[0, 0, 255, 255])
         axis = trimesh.creation.axis(origin_color= [1., 0, 0])
 
         scene = trimesh.Scene()
+        scene.add_geometry(point_mesh)
         scene.add_geometry(reconstructed_mesh)
         scene.add_geometry(label_mesh)
         scene.add_geometry(axis)
