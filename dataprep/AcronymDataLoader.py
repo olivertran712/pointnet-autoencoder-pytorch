@@ -8,7 +8,7 @@ import trimesh
 import h5py
 
 from torch.utils.data import Dataset
-from acronym_tools import load_mesh, load_grasps
+from .acronym import load_mesh, load_grasps
 
 def pc_normalize(pc):
     centroid = np.mean(pc, axis = 0)
