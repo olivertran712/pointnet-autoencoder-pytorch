@@ -62,7 +62,7 @@ class ACRONYMDataLoader(Dataset):
             path = os.path.join(self.grasps_root, self.datapath[index])
 
             obj_mesh = load_mesh(path, mesh_root_dir=self.root)
-            
+
             obj_points = obj_mesh.sample(self.num_points)
 
             T, success = load_grasps(path)
@@ -85,7 +85,7 @@ class ACRONYMDataLoader(Dataset):
 if __name__ == '__main__':
     import torch
 
-    data = ACRONYMDataLoader('./data/acronym', split='meshes')
+    data = ACRONYMDataLoader('./data/acronym', split='meshes', num_points=1024)
     DataLoader = torch.utils.data.DataLoader(data, batch_size=12, shuffle=True)
     for point, label in DataLoader:
         print(point.shape)
