@@ -367,11 +367,11 @@ def load_mesh(filename, mesh_root_dir, scale=None):
         mesh_scale = data["object_scale"] if scale is None else scale
     elif filename.endswith(".h5"):
         data = h5py.File(filename, "r")
-        mesh_fname = data["object/file"][()]#.decode('utf-8')
+        mesh_fname = data["object/file"][()].decode('utf-8')
         mesh_scale = data["object/scale"][()] if scale is None else scale
     else:
         raise RuntimeError("Unknown file ending:", filename)
-
+        
     obj_mesh = trimesh.load(os.path.join(mesh_root_dir, mesh_fname))
     obj_mesh = obj_mesh.apply_scale(mesh_scale)
 
