@@ -97,7 +97,7 @@ for epoch in range(int(ip_options.start_epoch_from), ip_options.nepoch):
     latent_vector_all = torch.Tensor().to(device)
     filename_all = list()
     for i, data in enumerate(train_dl):
-        points = data[0]
+        points = data[0].float()
         filenames = list(data[1])
 
         points = points.transpose(2, 1)
