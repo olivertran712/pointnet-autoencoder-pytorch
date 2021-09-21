@@ -46,7 +46,7 @@ writer = SummaryWriter('runs/' + ip_options.model_type)
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 # Creating Dataset
-train_ds = ACRONYMDataLoader(ip_options.dataset_path, split='train', num_points=ip_options.num_points)
+train_ds = ACRONYMDataLoader(ip_options.dataset_path, split='meshes', num_points=ip_options.num_points)
 
 # Creating DataLoader 
 train_dl = DataLoader(train_ds, batch_size=ip_options.batch_size, shuffle=True, num_workers= ip_options.num_workers)
