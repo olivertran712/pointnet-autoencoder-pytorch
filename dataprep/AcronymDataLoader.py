@@ -41,9 +41,10 @@ def farthest_point_sample(point, npoint):
     return point
 
 class ACRONYMDataLoader(Dataset):
-    def __init__(self, root, split="graps"):
+    def __init__(self, root, split="graps", num_points=2048):
         self.root = root
         self.split = split
+        self.num_points = num_points
         self.mesh_root = os.path.join(self.root, 'meshes')
         self.grasps_root = os.path.join(self.root, 'grasps')
         self.datapath = []
@@ -61,15 +62,18 @@ class ACRONYMDataLoader(Dataset):
             path = os.path.join(self.grasps_root, self.datapath[index])
 
             obj_mesh = load_mesh(path, mesh_root_dir=self.root)
+            
+            obj_points = obj_mesh.sample(self.num_points)
 
             T, success = load_grasps(path)
 
-            return obj_mesh, T
+            return obj_points, T
         if self.split == "meshes":
             path = os.path.join(self.grasps_root, self.datapath[index])
             
             obj_mesh = load_mesh(path, mesh_root_dir=self.root)
-            obj_points = obj_mesh.sample(2048)
+
+            obj_points = obj_mesh.sample(self.num_points)
             return obj_points, obj_points
     
     def __getitem__(self, index):
