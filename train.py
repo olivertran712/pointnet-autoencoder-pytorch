@@ -136,7 +136,7 @@ for epoch in range(int(ip_options.start_epoch_from), ip_options.nepoch):
     # save model with the best loss
     if epoch_loss < best_loss:  
         best_loss = epoch_loss
-        torch.save(autoencoder.state_dict(), 'saved_models/autoencoder_%s_%d.pth' % (ip_options.model_type, epoch))
+        torch.save(autoencoder.state_dict(), 'saved_models/autoencoder_modelnet_%s_%d.pth' % (ip_options.model_type, epoch))
         writer.add_embedding(latent_vector_all, metadata=filename_all, global_step=epoch, tag="Latent_Vectors")
 
     # Tensorboard logging 
