@@ -43,7 +43,7 @@ autoencoder.load_state_dict(state_dict)
 
        
 def infer_model_index(input_folder, ip_options, autoencoder):
-    data = ACRONYMDataLoader(root=input_folder, split='meshes', numpoints=ip_options.num_points)
+    data = ACRONYMDataLoader(root=input_folder, split='meshes', num_points=ip_options.num_points)
     
     for iter in range(len(data)):
         idx_choice = np.random.choice(len(data))
@@ -81,11 +81,11 @@ def infer_model_index(input_folder, ip_options, autoencoder):
         
         max_x = np.max(point_label[:,0], axis=0)
         print('max x: ', max_x)
-        point_mesh = trimesh.PointCloud(point_test_saved, colors=[255, 0, 0, 255])
+        point_mesh = trimesh.PointCloud(point_test_saved, colors=[255, 0, 0, 255]) #point test is red
         reconstructed_points = reconstructed_points + np.array([2.5*max_x, 0, 0])
-        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[0, 255, 0, 255])
+        reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[0, 255, 0, 255]) #point reconstruct is greedn
         point_label = point_label + np.array([5*max_x, 0, 0])
-        label_mesh = trimesh.PointCloud(point_label, colors=[0, 0, 255, 255])
+        label_mesh = trimesh.PointCloud(point_label, colors=[0, 0, 255, 255]) # point label is blue 
         axis = trimesh.creation.axis(origin_color= [1., 0, 0])
 
         scene = trimesh.Scene()
