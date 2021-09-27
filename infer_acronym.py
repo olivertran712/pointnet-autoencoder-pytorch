@@ -84,14 +84,12 @@ def infer_model_index(input_folder, ip_options, autoencoder):
         point_mesh = trimesh.PointCloud(point_test_saved, colors=[255, 0, 0, 255]) #point test is red
         reconstructed_points = reconstructed_points + np.array([2.5*max_x, 0, 0])
         reconstructed_mesh = trimesh.PointCloud(reconstructed_points, colors=[0, 255, 0, 255]) #point reconstruct is greedn
-        point_label = point_label + np.array([5*max_x, 0, 0])
-        label_mesh = trimesh.PointCloud(point_label, colors=[0, 0, 255, 255]) # point label is blue 
+
         axis = trimesh.creation.axis(origin_color= [1., 0, 0])
 
         scene = trimesh.Scene()
         scene.add_geometry(point_mesh)
         scene.add_geometry(reconstructed_mesh)
-        scene.add_geometry(label_mesh)
         scene.add_geometry(axis)
         scene.show(background=[0, 0 , 0 ,0])
 

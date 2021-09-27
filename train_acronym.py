@@ -40,7 +40,7 @@ random.seed(manualSeed)
 torch.manual_seed(manualSeed) #later: 
 
 # Create instance of SummaryWriter 
-writer = SummaryWriter('runs/' + ip_options.model_type)
+writer = SummaryWriter('runs/acronym/' + ip_options.model_type)
 
 # determine the device to run the network on
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -97,11 +97,11 @@ for epoch in range(int(ip_options.start_epoch_from), ip_options.nepoch):
     latent_vector_all = torch.Tensor().to(device)
     filename_all = list()
     for i, data in enumerate(train_dl):
-        points = data[0].float()
+        points = data[0]
         filenames = list(data[1])
 
         points = points.transpose(2, 1)
-        
+
         points = points.to(device)
 
         optimizer.zero_grad()   # Reseting the gradients

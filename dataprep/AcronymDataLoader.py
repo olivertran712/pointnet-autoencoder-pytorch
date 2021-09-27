@@ -17,10 +17,6 @@ def pc_normalize(pc):
     pc = pc/m
     return pc
 
-def pc_centralize(pc):
-    centroid = np.mean(pc, axis=0)
-    pc = pc - centroid
-    return pc
 
 def farthest_point_sample(point, npoint):
     """
@@ -79,8 +75,8 @@ class ACRONYMDataLoader(Dataset):
             obj_mesh = load_mesh(path, mesh_root_dir=self.root)
 
             obj_points = obj_mesh.sample(self.num_points)
-            obj_points_centralized = pc_centralize(obj_points)
-            return obj_points_centralized, obj_points_centralized
+            obj_points_norm = pc_normalize(obj_points.astype(np.float32))
+            return obj_points_norm, obj_points_norm #obj_points, obj_points 
     
     def __getitem__(self, index):
         return self._get_item(index)

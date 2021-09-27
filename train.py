@@ -40,7 +40,7 @@ random.seed(manualSeed)
 torch.manual_seed(manualSeed) #later: 
 
 # Create instance of SummaryWriter 
-writer = SummaryWriter('runs/' + ip_options.model_type)
+writer = SummaryWriter('runs/modelnet40/' + ip_options.model_type)
 
 # determine the device to run the network on
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
